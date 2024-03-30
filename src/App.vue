@@ -1,20 +1,31 @@
 <script>
 
-import SearchMovie from './components/SearchMovie.vue';
+import AppHeader from './components/AppHeader.vue';
+import AppMain from './components/AppMain.vue';
+import AppFooter from './components/AppFooter.vue';
 
 export default {
-  name: 'App',
-  components: {
-    SearchMovie
-  }
-};
+    name: 'App',
+    components: { AppHeader, AppMain, AppFooter },
+    data() {
+        return {
+           
+        };
+    },
+    mounted() {
+        
+    },
+    
+}
 </script>
 
 <template>
-  <div id="app">
-    
-    <SearchMovie></SearchMovie>
-  </div>
+<AppHeader></AppHeader>
+<AppMain></AppMain>
+<AppFooter></AppFooter>
+
+
 </template>
+
 
 <style scoped></style>

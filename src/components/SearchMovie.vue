@@ -1,7 +1,5 @@
-  
 <script>
 import axios from 'axios';
-
 
 export default {
 
@@ -49,7 +47,7 @@ export default {
             return `https://image.tmdb.org/t/p/w342${posterPath}`;
         },
         getCountryCode(languageCode) {
-            // language codes to country codes
+            // Mapping from language codes to country codes
             const languageToCountry = {
                 en: 'gb', // Inglese a Gran Bretagna
                 it: 'it', // Italiano a Italia
@@ -80,57 +78,91 @@ export default {
                 bn: 'bd', // Bengalese a Bangladesh
             };
 
-            return languageToCountry[languageCode] || 'us'; // Provides a default country code
+            return languageToCountry[languageCode] || 'us'; // Fornisce un codice di paese di default
         },
     }
 };
 </script>
-   
+
 <template>
     <div>
-        <input type="text" v-model="searchQuery" @keyup.enter="searchAll" placeholder="Cerca un film o una serie TV..."> {{ " " }}
+        <input type="text" v-model="searchQuery" @keyup.enter="searchAll" placeholder="Cerca un film o una serie TV...">
+        {{
+            " " }}
         <button @click="searchAll">Cerca</button>
 
-        <div v-if="results.length">
+        <div class="container" v-if="results.length">
             <h2>Risultati della ricerca:</h2>
+            <div class="row">
 
-            <div v-for="result in results" :key="result.id" class="result">
-                <!-- <h3>{{ result.title }}</h3> -->
-                <img :src="getImageUrl(result.poster_path)" alt="Copertina" class="cover-image">
-                <div v-if="result.type === 'movie'">
-                    <h3>Titolo del film: {{ result.title }}</h3>
-                </div>
-                <div v-if="result.type === 'tv'">
-                    <h3>Titolo serie TV: {{ result.title }}</h3>
-                </div>
-                <p>Titolo Originale: {{ result.original_title }}</p>
-                <p>Lingua: <span :class="'fi fi-' + getCountryCode(result.original_language)"></span></p>
-                <p>Voto: {{ calculateStars(result.vote_average) }}/5</p>
-                <div>
-                    <!-- Stelle piene -->
-                    <i v-for="star in calculateStars(result.vote_average)" :key="star" class="fas fa-star"></i>
-                    <!-- Stelle vuote -->
-                    <i v-for="emptyStar in 5 - calculateStars(result.vote_average)" :key="emptyStar + 5"
-                        class="far fa-star"></i>
-                </div>
+                <div class="col-12 col-sm-6 col-md-4 col-lg-4" v-for="result in results" :key="result.id">
+                    <div class="card">
+                        <div class="image-container">
+                            <img :src="getImageUrl(result.poster_path)" alt="Copertina" class="cover-image" v-if="result.poster_path">
+                            <div v-else>Immagine non disponibile</div>
 
+                        </div>
+                        
+                        <div class="card-body">
+                            <div v-if="result.type === 'movie'">
+                                <h3>Titolo del film: {{ result.title }}</h3>
+                            </div>
+                            <div v-if="result.type === 'tv'">
+                                <h3>Titolo serie TV: {{ result.title }}</h3>
+                            </div>
+                            <p>Titolo Originale: {{ result.original_title }}</p>
+                            <p>Lingua: <span :class="'fi fi-' + getCountryCode(result.original_language)"></span></p>
+                            <p>Voto: {{ calculateStars(result.vote_average) }}/5</p>
+                            <div>
+                                <!-- Stelle piene -->
+                                <i v-for="star in calculateStars(result.vote_average)" :key="star"
+                                    class="fas fa-star"></i>
+                                <!-- Stelle vuote -->
+                                <i v-for="emptyStar in 5 - calculateStars(result.vote_average)" :key="emptyStar + 5"
+                                    class="far fa-star"></i>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
             </div>
         </div>
+
     </div>
 </template>
-
 <style scoped>
 ul {
     list-style: none;
 }
-
-.result {
-    margin-bottom: 20px;
+h2 {
+    text-align: center;
 }
+
+.image-container {
+    width: 342px; 
+    height: 500px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
 
 .cover-image {
-    width: 100%;
-    max-width: 342px;
-    height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  
+  &:hover {
+    filter: drop-shadow(0 0 15px red);
+    scale: 1.05;
+  }
+  
+}
+.card-body {
+    padding-top: 1.5rem;
+    text-align: center;
 }
 </style>
+
